@@ -29,6 +29,7 @@ npm run lint
 - Gráfica de los últimos 14 días / 12 semanas / 12 meses; al hacer clic en una barra se abre ese periodo.
 - Desglose por categoría con porcentaje.
 - Moneda configurable (COP por defecto) y respaldo en JSON (importable) o CSV.
+- Modo claro/oscuro con botón en la cabecera: arranca según la preferencia del sistema y recuerda tu elección.
 
 ## Despliegue
 

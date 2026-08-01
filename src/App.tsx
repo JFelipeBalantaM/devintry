@@ -9,11 +9,13 @@ import { ExpenseList } from './components/ExpenseList'
 import { PeriodNav } from './components/PeriodNav'
 import { SettingsPanel } from './components/SettingsPanel'
 import { SummaryCards } from './components/SummaryCards'
+import { ThemeToggle } from './components/ThemeToggle'
 import { TrendChart } from './components/TrendChart'
 import { download, toCsv } from './lib/csv'
 import { elapsedDays, fromKey, startOfPeriod, toKey, todayKey } from './lib/date'
 import { parseSnapshot } from './lib/storage'
 import { byCategory, dailyAverage, inPeriod, previousPeriodTotal, sum, trend } from './lib/stats'
+import { useTheme } from './useTheme'
 
 const TREND_SIZE: Record<Period, number> = { day: 14, week: 12, month: 12 }
 
@@ -25,6 +27,7 @@ const TREND_TITLE: Record<Period, string> = {
 
 export default function App() {
   const { expenses, settings, setSettings, add, update, remove, clear, restore } = useExpenses()
+  const { theme, toggle: toggleTheme } = useTheme()
   const [period, setPeriod] = useState<Period>('day')
   const [anchor, setAnchor] = useState(() => new Date())
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -87,14 +90,17 @@ export default function App() {
             Todo se guarda solo en este navegador.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setShowSettings((open) => !open)}
-          aria-expanded={showSettings}
-          className="rounded-xl border border-neutral-300 px-3 py-1.5 text-sm transition hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
-        >
-          Ajustes
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
+          <button
+            type="button"
+            onClick={() => setShowSettings((open) => !open)}
+            aria-expanded={showSettings}
+            className="h-9 rounded-xl border border-neutral-300 px-3 text-sm transition hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+          >
+            Ajustes
+          </button>
+        </div>
       </header>
 
       {showSettings && (
@@ -148,6 +154,7 @@ export default function App() {
           <TrendChart
             buckets={buckets}
             settings={settings}
+            theme={theme}
             onSelect={(key) => setAnchor(fromKey(key))}
           />
         </Card>
